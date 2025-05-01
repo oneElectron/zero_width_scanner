@@ -41,7 +41,7 @@ async fn scan_folder(path: PathBuf) {
         } else if file_type.is_file() {
             let entry = entry.path();
 
-            join_set.spawn(async move {
+            let _ = tokio::spawn(async move {
                 let Ok(s) = tokio::fs::read_to_string(&entry).await else {
                     return;
                 };
@@ -60,7 +60,7 @@ async fn scan_folder(path: PathBuf) {
                         entry.file_name().unwrap().to_str().unwrap()
                     );
                 }
-            });
+            }).await;
         }
     }
 
